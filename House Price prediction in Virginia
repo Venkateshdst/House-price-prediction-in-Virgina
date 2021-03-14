@@ -1,0 +1,45 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import sklearn.datasets
+from sklearn.model_selection import train_test_split
+from xgboost import XGBRegressor
+from sklearn import metrics
+house_price_dataset = sklearn.datasets.load_virginia()
+print(house_price_dataset)
+house_price_dataframe = pd.DataFrame(house_price_dataset.data, columns = house_price_dataset.feature_names)
+house_price_dataframe.head()
+house_price_dataframe['price'] = house_price_dataset.target
+house_price_dataframe.head()
+house_price_dataframe.isnull().sum()
+house_price_dataframe.describe()
+correlation = house_price_dataframe.corr()
+plt.figure(figsize=(10,10))
+sns.heatmap(correlation, cbar=True, square=True, fmt='.if', annot=True, annot_kws={'size':8}, cmap='Blues')
+x = house_price_dataframe.drop(['price'], axis=1)
+y = house_price_dataframe['price']
+print(x,y)
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.20, random_state=2)
+print(x.shape,x_train.shape,x_test.shape)
+model = XGBRegressor()
+model.fit(x_train,y_train)
+training_data_prediction=model.predict(x_train)
+print(training_data_prediction)
+score_1 = metrics.r2_score(y_train,training_data_prediction)
+score_2 = metrics.mean_absolute_error(y_train,training_data_prediction)
+print("r2 score error is :", score_1)
+print("mean absolute error is :", score_2)
+test_data_prediction = model.predict(x_test)
+score_1 = metrics.r2_score(y_test, test_data_prediction)
+score_2 = metrics.mean_absolute_error(y-test, test_data_prediction)
+score_1 = metrics.r2_score(y_train,training_data_prediction)
+score_2 = metrics.mean_absolute_error(y_train,training_data_prediction)
+print(" r2 score erroe is :", score_1)
+print("mean absolute error is :", score_2)
+plt.scatter(y_train,training_data_prediction)
+plt.xlabel("Actual Price")
+plt.ylabel("Predicted Prices")
+plt.title("Actual Price vs Predicted Price")
+plt.show()
+
