@@ -6,7 +6,7 @@ import sklearn.datasets
 from sklearn.model_selection import train_test_split
 from xgboost import XGBRegressor
 from sklearn import metrics
-house_price_dataset = sklearn.datasets.load_virginia()
+house_price_dataset = sklearn.datasets.load_boston()
 print(house_price_dataset)
 house_price_dataframe = pd.DataFrame(house_price_dataset.data, columns = house_price_dataset.feature_names)
 house_price_dataframe.head()
